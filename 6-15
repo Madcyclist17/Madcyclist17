@@ -1,0 +1,627 @@
+List ADT using array
+#include<iostream> using namespace std; template<class T>class list
+{ T lis[10]; int count,flag,i; public : list(); void insert(int,T); void disp(); void findkth(int); void find(T); void dele(int);
+};
+template<class T>list<T>::list()
+{
+count=0;
+} template<class T>void list<T>::insert(int pos,T ele)
+{
+if(pos<count)
+{ cout<<"insertion is not possible";
+}
+else
+{ for(int i=count;i>=pos;i--)
+{ lis[i]=lis[i-1];
+} lis[pos-1]=ele; count++;
+}
+}
+template<class T>void list<T>::dele(int pos)
+{
+cout<<"Deleted element is "<<lis[pos-1]; for(i=(pos-1);i<count;i++)
+{ lis[i]=lis[i+1];
+}
+}
+template<class T>void list<T>::disp()
+{ for(int i=0;i<count;i++)
+{ cout<<lis[i]<<" ";
+}
+}
+template<class T>void list<T>::findkth(int pos)
+{
+cout<<"Element in position "<<pos<<" is "<<lis[pos-1];
+} template<class T>void list<T>::find(T ele)
+{ for(i=1;i<=10;i++)
+{ if(lis[i]==ele)
+{ flag=1; break;
+} } if(flag=1)
+{
+cout<<"Element is in position "<<i+1;
+}
+} int main()
+{ list<int>l;
+int ch,post,elem; while(ch!=6)
+{
+cout<<endl<<"1. Insert\n"<<"2. Delete\n"<<"3. List\n"<<"4. Find\n"<<"5. Find kth\n"<<"6. Exit\n"; cout<<"Enter your choice "; cin>>ch; switch(ch)
+{
+case 1:cout<<"Enter the element and position "; cin>>elem>>post;
+l.insert(post,elem); break; case 2:cout<<"Enter the position "<<endl;
+cin>>post;
+l.dele(post);
+break; case 3:cout<<"Elements in the list - ";
+l.disp();
+break; case 4:cout<<"Enter the element to find "<<endl; cin>>elem;
+l.find(elem);
+break; case 5:cout<<"Enter the position "<<endl;
+cin>>post;
+l.findkth(post);
+break; default:;
+}
+}
+}
+Linked List ADT
+#include<iostream> using namespace std; template <class T>class linkedlist
+{
+class node
+{ friend class linkedlist; T data; node *next; public:
+node(T item,node *nx=NULL)
+{
+data=item; next=nx;
+}
+}*m_head,*m_tail; int m_size; public: linkedlist(); void addhead(T); void display(); void addtail(T); int rem_head(); int rem_tail(); int isEmpty(); int addnode(int pos,T); int removenode(int pos); void find(T); void findkth(int pos);
+};
+template<class T>int linkedlist<T>::isEmpty()
+{
+if(m_size==0)
+return 1; else return 0;
+}
+template <class T>linkedlist<T>::linkedlist()
+{
+m_head=NULL; m_tail=NULL; m_size=0;
+}
+template<class T>void linkedlist<T>::addhead(T item )
+{
+m_head=new node(item,m_head); if(m_tail==NULL) m_tail=m_head; m_size++;
+}
+template<class T>void linkedlist<T>::addtail(T item)
+{
+node *ctail=m_tail; m_tail=new node(item); ctail->next=m_tail; if(m_head==NULL) m_head=m_tail; m_size++;
+}
+template<class T>int linkedlist<T>::rem_head()
+{
+T retval;
+//cout<<endl<<" in removehead "<<m_head<<" "<<m_tail<<" "<<m_size<<" "; node *oldhead=m_head; m_head=m_head->next; retval=oldhead->data; delete oldhead; m_size--; return retval;
+}
+template<class T>int linkedlist<T>::rem_tail()
+{
+T retval;
+if (m_head==m_tail) return rem_head(); node *oldtail=m_head; retval=m_tail->data; while(oldtail->next!=m_tail) oldtail=oldtail->next; oldtail->next=NULL; delete m_tail; m_tail=oldtail; m_size--; return retval;
+}
+template < class T>int linkedlist<T>::addnode(int pos,T item)
+{
+if(pos==1) addhead(item); else if(pos==m_size+1) addtail(item); else
+{
+node *p=m_head;
+for(int k=1;k<pos-1;k++) p=p->next; p->next=new node(item,p->next); m_size++;
+}
+}
+template < class T>int linkedlist<T>::removenode(int pos)
+{
+T retval; int item; if(pos==1) return rem_head(); if(pos==m_size) return rem_tail(); node *p=m_head;
+for(int i=1;i<pos-1;i++) p=p->next; node *q=p->next; item=q->data; p->next=q->next; delete q; m_size--; return retval;
+}
+template<class T>void linkedlist<T>::find(T data)
+{
+node *p=m_head;
+int cnt=0,flag=0; while(p!=NULL)
+{
+cnt++; if(p->data==data)
+{ flag++; break;
+}
+p=p->next;
+} if(flag)
+{
+cout<<"data is found "<<cnt<<endl;
+}
+else
+{
+cout<<"data is not found ";
+}
+}
+template<class T>void linkedlist<T>::findkth(int pos)
+{
+node *p=m_head; while(pos!=1)
+{
+p=p->next; pos--;
+}
+cout<<"data at node = "<<p->data<<endl;
+}
+template<class T>void linkedlist<T>::display()
+{
+node *cnode=m_head; while(cnode!=NULL)
+{
+cout<<cnode->data<<"  "; cnode=cnode->next;
+}
+cout<<endl; exit(0);
+}
+int main()
+{
+int ch,item,postn; linkedlist<int>l; while(ch!=10)
+{
+cout<<endl<<"1. Add Head"<<endl<<"2. Add Tail"<<endl<<"3. Remove Head"<<endl<<"4. Remove Tail"<<endl<<"9.
+List"<<endl<<"10. Exit"<<endl<<"Enter your choice "<<endl; cin>>ch; switch(ch)
+{
+case 1: //cout<<"Enter the element"<<endl; cin>>item;
+l.addhead(item); break;
+case 2: //cout<<"Enter the element"<<endl; cin>>item;
+l.addtail(item); break;
+case 3: if(l.isEmpty()) cout<<"Deletetion not possible"<<endl; else
+{
+item=l.rem_head(); cout<<item;
+}
+break;
+case 4: if(l.isEmpty()) cout<<"Deletion is not possible"; else
+{ item=l.rem_tail(); cout<<item;
+}
+case 5://cout<<"Enter the element "; cin>>item;
+//cout<<"Enter the position "; cin>>postn;
+l.addnode(postn,item); break;
+case 6://cout<<"Enter the position "; cin>>postn;
+l.removenode(postn); break;
+case 7: //cout<<"Enter the element "; cin>>item;
+l.find(item); break;
+case 8://cout<<"Enter the position ";
+cin>>postn;
+l.findkth(postn); break;
+case 9: l.display();
+break;
+default:;
+}
+}
+}
+Stack Linked List ADT
+#include<iostream> using namespace std; template<class T>class linkedlist
+{
+class node
+{ friend class linkedlist; T data; node *next; public:
+node(T d,node *n)
+{
+data=d; next=n;
+}
+}*head; public: linkedlist(); void push(T); T pop(); void list();
+};
+template<typename T>linkedlist<T>::linkedlist()
+{
+head=NULL;
+}
+template<typename T>void linkedlist<T>::push(T data)
+{
+head=new node(data,head);
+}
+template<typename T>T linkedlist<T>::pop()
+{
+node *temp=head; T data=temp->data; head=head->next; delete temp; return data;
+}
+template<typename T>void linkedlist<T>::list()
+{
+node *temp=head; while(temp!=NULL){ cout<<temp->data<<" "; temp=temp->next;
+}
+cout<<endl;
+}
+int main()
+{ linkedlist<int>l; int num,data; while(num!=4)
+{
+//cout<<"\n1. PUSH\n2. POP\n3. List\n4. Exit\n"; cin>>num;
+switch(num){
+case 1:
+//cout<<"enter the data to push"<<endl; cin>>data;
+l.push(data); break; case 2: cout<<l.pop()<<endl; break; case 3:
+l.list(); break;
+}
+}
+}
+Queue Linked List ADT
+#include<iostream> using namespace std; template<class T>class linkedlist {
+class node
+{ friend class linkedlist; T data; node *next; node(T d,node *n=NULL)
+{
+data=d; next=n;
+}
+}*head,*tail; public: linkedlist(); void Insert(T); void Delete(); void list();
+};
+template<typename T>linkedlist<T>::linkedlist()
+{
+head=NULL; tail=NULL;
+}
+template<typename T>void linkedlist<T>::Insert(T data)
+{
+if(head==NULL)
+{
+head=new node(data); tail=head;
+}
+else
+{
+node *temp=tail; tail=new node(data); temp->next=tail;
+}
+}
+template<typename T>void linkedlist<T>::Delete()
+{
+node *temp=head; head=head->next; cout<<temp->data<<endl; delete temp;
+}
+template <typename T>void linkedlist<T>::list()
+{
+node *temp=head; while(temp!=NULL)
+{
+cout<<temp->data<<" "; temp=temp->next;
+}
+cout<<endl;
+}
+int main()
+{ linkedlist<int>l; int ch,data; while(ch!=4)
+{
+//cout<<"\n1. Insert\n2. Delete\n3. List\n4. Exit\n"; cin>>ch; switch(ch)
+{
+case 1:cin>>data;
+l.Insert(data); break;
+case 2:l.Delete(); break;
+case 3:l.list(); break;
+}
+}
+}
+Binary Search Tree(BST)
+#include<iostream> using namespace std; template<class T>class BST{
+class treenode
+{ friend class BST; T data; treenode *lchild,*rchild;
+}*root; public:
+BST(); void insert(T); void inord(); void inorder(treenode *); void preord(); void preorder(treenode *); void postord(); void postorder(treenode *); void find(T); void Deletebst(T); void Delete(treenode *,int);
+T findmin(treenode *);
+};
+template<class T>BST<T>::BST(){
+root=NULL;
+}
+template<class T>void BST<T>::insert(T item){
+treenode *p=root,*q; while(p!=NULL){ q=p; if(item<p->data){ p=p->lchild;
+} else{ p=p->rchild;
+}
+}
+p=new treenode(); p->lchild=NULL; p->rchild=NULL; p->data=item; if(root==NULL) root=p; else
+{
+if(item<q->data) q->lchild=p; else q->rchild=p;
+}
+}
+template<class T>void BST<T>::inord(){
+inorder(root);
+}
+template<class T>void BST<T>::inorder(treenode *currentnode){
+if(currentnode){
+inorder(currentnode->lchild); cout<<currentnode->data<<" "; inorder(currentnode->rchild);
+}
+}
+template<class T>void BST<T>::preord(){
+preorder(root);
+}
+template<class T>void BST<T>::preorder(treenode *currentnode){
+if(currentnode){
+cout<<currentnode->data<<" "; preorder(currentnode->lchild); preorder(currentnode->rchild);
+}
+}
+template<class T>void BST<T>::postord(){
+postorder(root);
+}
+template<class T>void BST<T>::postorder(treenode *currentnode){
+if(currentnode){
+postorder(currentnode->lchild); postorder(currentnode->rchild); cout<<currentnode->data<<" ";
+}
+}
+template<class T>void BST<T>::find(T item){
+treenode *p=root; while(p!=NULL){ if(item>p->data) p=p->rchild; else if
+(item<p->data) p=p->lchild; else break;
+}
+if(p==NULL) cout<<"element is not found"; else
+cout<<"element is found";
+}
+template<class T>void BST<T>::Deletebst(T value){ Delete(root,value);
+}
+template<class T>void BST<T>::Delete(treenode *p,int item){
+treenode *q;
+while(p->data!=item){ q=p; if(item>p->data){ p=p->rchild;
+}
+else if(item<p->data){ p=p->lchild;
+}
+}
+if(p->rchild==NULL && p->lchild==NULL){
+if(p==root){ delete root; root=NULL;
+} else{ if(q->data>item){
+q->lchild=NULL;
+} else{ q->rchild=NULL;
+}
+delete p;
+}
+}
+else if(p->rchild!=NULL && p->lchild==NULL){
+if(p==root){ root=p->rchild; delete p;
+} else{
+if(q->data<item){
+q->rchild=p->rchild;
+} else{ q->lchild=p->rchild;
+}
+delete p;
+}
+}
+else if(p->rchild==NULL && p->lchild!=NULL){
+if(q->data<item){ q->rchild=p->lchild;
+} else{ q->lchild=p->lchild;
+}
+delete p;
+} else{
+T temp2=findmin(p->rchild); Delete(p,temp2); p->data=temp2;
+}
+cout<<"deleted";
+}
+template<class T>T BST<T>::findmin(treenode *p){
+if(p==NULL){ cout<<"error"; return -1;
+}
+while(p->lchild!=NULL) p=p->lchild; return p->data;
+} int main(){
+int ch,item; BST<int>b; while(ch!=6){
+//cout<<"1.Insert\n2.Delete\n3.Pre-order\n4.Post-order\n5.In-order\n6.Exit"<<endl;
+//cout<<"enter the choice"<<endl; cin>>ch; switch(ch){ case 1://cout<<"enter the element"<<endl; cin>>item;
+b.insert(item); break; case 2://cout<<"enter the element to delete"<<endl; cin>>item;
+b.Deletebst(item); break; case 3:
+b.preord(); break; case 4:
+b.postord(); break; case 5:
+b.inord(); break;
+}
+}
+}
+Warshall’s  shortest  path algorithm
+#include<iostream> using namespace std; template<class T>class graph{ T gr[10][10]; int nod; public:
+void readgraph(); void dispgraph(); void path();
+};
+template<class T>void graph<T>::readgraph(){ int i,j,e,w,efrom,eto; cout<<"Enter the number of nodes "<<endl; cin>>nod; for(i=0;i<nod;i++){
+for(j=0;j<nod;j++){ if(i==j){ gr[i][j]=0;
+}
+else
+{ gr[i][j]=999;
+}
+}
+}
+cout<<"Enter the number of edges "<<endl; cin>>e; cout<<"Enter the edges "<<endl; for(i=0;i<e;i++){
+cin>>efrom>>eto>>w; gr[efrom][eto]=w;
+}
+}
+template<class T>void graph<T>::dispgraph(){ int i,j;
+cout<<"Entered Matrix"<<endl; for(i=0;i<nod;i++){
+for(j=0;j<nod;j++){
+cout<<gr[i][j]<<" ";
+}
+cout<<endl;
+}
+}
+template<class T>void graph<T>::path(){
+int i,j,k;
+cout<<"Shortest path"<<endl; for(i=0;i<nod;i++){ for(j=0;j<nod;j++){ for(k=0;k<nod;k++){
+if(gr[j][k]>gr[j][i]+gr[i][k]){ gr[j][k]=gr[j][i]+gr[i][k];
+}
+}
+}
+} for(i=0;i<nod;i++){ for(j=0;j<nod;j++){
+cout<<gr[i][j]<<" ";
+}
+cout<<endl;
+} exit(0);
+}
+int main(){ graph<int>g; int ch; while(ch!=4){
+cout<<"1.Read Matrix\n2.Display Matrix\n3.Shortest path\n4.Exit"<<endl; cout<<"Enter the choice "<<endl; cin>>ch; switch(ch){
+case 1 :
+g.readgraph(); break; case 2:
+g.dispgraph(); break; case 3:
+g.path(); break;
+}
+}
+}
+BFS & DFS in graph
+#include<iostream>
+#include"stack.h" #include"queue.h" using namespace std; template<class T>class graph {
+T gr[10][10]; int nodes; int visited[10]; public: graph(int); void makegraph(); void disgraph(); void DFS(); void BFS();
+};
+template<class T>graph<T>::graph(int n)
+{
+nodes=n;
+}
+template<class T>void graph<T>::makegraph()
+{ int e,efrom,eto,i,j; cout<<"Enter the number of nodes "<<endl; cin>>nodes; cout<<"Enter the number of edges "<<endl; cin>>e; for(i=0;i<nodes;i++)
+{
+for(j=0;j<nodes;j++)
+{ gr[i][j]=0;
+}
+}
+cout<<"Enter the edges "<<endl; for(i=0;i<e;i++)
+{
+cin>>efrom>>eto; gr[efrom][eto]=1; gr[eto][efrom]=1;
+}
+}
+template<class T>void graph<T>::disgraph()
+{ int i,j;
+cout<<"Adjacency Matrix"<<endl; for(i=0;i<nodes;i++)
+{
+for(j=0;j<nodes;j++)
+{
+cout<<gr[i][j]<<" ";
+}
+cout<<endl;
+}
+}
+template<class T>void graph<T>::DFS()
+{ int i,j,v;
+stack<int>s; cout<<"DFS"<<endl; for(i=0;i<nodes;i++)
+{ visited[i]=0;
+}
+s.push(0); visited[0]=1; while(!s.isEmpty())
+{
+v=s.pop(); cout<<v<<" "; for(i=0;i<nodes;i++)
+{ if(gr[v][i]==1)
+{ if(visited[i]==0)
+{
+s.push(i); visited[i]=1;
+}
+}
+}
+}
+cout<<endl;
+}
+template<class T>void graph<T>::BFS()
+{ int k,j,v;
+QueueADT<int>q; cout<<"BFS"<<endl; for(k=0;k<nodes;k++)
+{ visited[k]=0;
+}
+q.Insert(0);
+visited[0]=1; while(!q.isEmpty())
+{
+v=q.Delete(); cout<<v<<" "; for(k=0;k<nodes;k++)
+{
+if (gr[v][k]==1)
+{ if(visited[k]==0)
+{
+q.Insert(k); visited[k]=1;
+}
+}
+}
+}
+cout<<endl; exit(0);
+}
+int main()
+{
+graph<int>g(5); int ch; while(ch!=5)
+{
+cout<<"1.Read Matrix\n2.Display Matrix\n3.DFS\n4.BFS\n5.Exit\nEnter the choice "<<endl; cin>>ch; switch(ch)
+{
+case 1:g.makegraph(); break; case 2:g.disgraph(); break; case 3:g.DFS(); break; case 4:g.BFS(); break;
+}
+}
+}
+Linear search
+#include<iostream>
+using namespace std;
+template <class T> class linear
+{
+T a[10]; int size; public:
+void readarray(); void searcharray(T);
+};
+template<class T>void linear<T>::readarray()
+{ int i;
+cout<<"Enter the number of element "; cin>>size; cout<<"Enter the elements "; for(i=0;i<size;i++) cin>>a[i];
+}
+template<class T>void linear<T>::searcharray(T element)
+{ int i; for(i=0;i<size;i++)
+if(a[i]==element)
+{
+cout<<"Element found in position "<<i+1; break;
+}
+else
+{ if(i==size)
+cout<<"Element is not present ";
+}
+} int main()
+{ linear<int>l;
+l.readarray(); int data; cout<<"Enter the element to search "; cin>>data;
+l.searcharray(data);
+}
+Binary search
+#include<iostream> using namespace std; template <class T> class binary
+{
+T a[10]; int size; public:
+void readarray(); void searcharray(T); void binarysearch(int,int,T);
+};
+template<class T>void binary<T>::readarray()
+{ int i;
+cout<<"Enter the number of elements \n"; cin>>size; cout<<"Enter the elements \n"; for(i=0;i<size;i++) cin>>a[i];
+/*cout<<"Entered elements are "; for(i=0;i<size;i++) cout<<a[i]<<" ";*/
+}
+template<class T>void binary<T>::searcharray(T key)
+{
+binarysearch(0,size-1,key);
+}
+template<class T>void binary<T>::binarysearch(int low,int high,T key)
+{ int mid;
+if(low>high) cout<<"Element is not present ";
+else
+{
+mid=(low+high)/2; if(a[mid]==key)
+{
+cout<<"Element found in position "<<mid+1;
+}
+else if(a[mid]<key)
+{
+binarysearch(mid+1,high,key);
+}
+else
+{
+binarysearch(low,mid-1,key);
+}
+}
+} int main()
+{ int ele; binary<int>b;
+b.readarray(); cout<<"Search Element \n"; cin>>ele;
+b.searcharray(ele);
+}
+Bubble sort
+#include<iostream> using namespace std;
+template<class T> class bubble
+{
+T arr[10]; int n; public:
+void readarray(); void sortarray(); void printarray();
+};
+template<class T>void bubble<T>::readarray()
+{
+cout<<"Enter the number of elements "; cin>>n; cout<<"Enter the elements "; for(int i=0;i<n;i++) cin>>arr[i];
+}
+template<class T>void bubble<T>::printarray()
+{
+cout<<"Sorted List "; for(int i=0;i<n;i++) cout<<arr[i]<<"\t";
+}
+template<class T>void bubble<T>::sortarray()
+{ int i,j,swap=1; T temp; for(int i=0;i<n-1 && swap==1;i++)
+{
+swap=0;
+for(int j=0;j<n-i-1;j++)
+{ if(arr[j]>arr[j+1])
+{
+swap=1; temp=arr[j]; arr[j]=arr[j+1]; arr[j+1]=temp;
+}
+}
+}
+} int main()
+{
+bubble<int>b; b.readarray();
+b.sortarray();
+b.printarray();
+}
+Quick sort
+#include<iostream> using namespace std; template<class T> class quick{ T arr[10]; int n; public:
+void readarray(); void sortarray(); void sort(int,int); int partition(int,int); void printarray();
+};
+template<class T>void quick<T>::readarray(){
+cout<<"Enter the number of elements "; cin>>n; cout<<"Enter the elements "; for(int i=0;i<n;i++) cin>>arr[i];
+}
+template<class T>void quick<T>::printarray(){
+cout<<"Sorted List "; for(int i=0;i<n;i++) cout<<arr[i]<<"\t";
+}
+template<class T>void quick<T>::sortarray(){
+sort(0,n-1);
+} template<class T>void quick<T>::sort(int lb,int ub){
+int j;
+if(lb>ub) return; j=partition(lb,ub); sort(lb,j-1); sort(j+1,ub);
+} template<class T>int quick<T>::partition(int lb,int ub){
+int up,down; T a,temp; up=ub; down=lb; a=arr[lb]; while(down<up){
+while(arr[down]<=a && down<up) down++;
+while(arr[up]>a) up--; if(down<up){
+temp=arr[up]; arr[up]=arr[down]; arr[down]=temp;
+}
+} arr[lb]=arr[up]; arr[up]=a; return up;
+} int main(){
+quick<int>q;
+q.readarray();
+q.sortarray();
+q.printarray();
+}
